@@ -15,8 +15,8 @@ class RSSReaderVnexpress {
 
     public function run() {
         $rss = config('rss.vnexpress');
-        foreach ($rss as $key => $rssUrl) {
-            $this->getRSSContent($key, $rssUrl);
+        foreach ($rss as $rssUrl) {
+            $this->getRSSContent($rssUrl);
         }
     }
 
@@ -24,25 +24,28 @@ class RSSReaderVnexpress {
      * This function get all items from RSS link.
      * For each item, it will get title, description and link.
      *
-     * @param int|string $key
      * @param string $rssUrl
-     * @return void
+     * @return array
      */
-    private function getRSSContent(int | string $key, string $rssUrl) {
+    public function getRSSContent(string $rssUrl) {
         // read RSS link and get rss contents
         $feed = $this->feedReader->read($rssUrl);
+        $result = [];
 
         // foreach item in rss contents, get title, description and link
         // in each link, crawl the html content and filter the class fck_detail
         // save the content to database
         foreach ($feed->get_items() as $item) {
-            $title       = $item->get_title();
-            $description = $item->get_description();
-            $link        = $item->get_link();
-            $content     = $this->getContentFromLink($link);
-            dd($content);
+            $data = [];
+            $data['title']       = $item->get_title();
+            $data['description'] = $item->get_description();
+            $data['link']        = $item->get_link();
+            $data['content']     = $this->getContentFromLink($data['link']);
 //            $this->saveContentToDatabase($key, $title, $description, $link, $content);
+            $result[] = $data;
         }
+
+        return $result;
     }
 
     /**
@@ -51,7 +54,7 @@ class RSSReaderVnexpress {
      * @param string|null $link
      * @return string
      */
-    private function getContentFromLink( ? string $link) {
+    public function getContentFromLink( ? string $link) {
         $client  = new Client();
         $crawler = $client->request('GET', $link);
 
