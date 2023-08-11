@@ -15,7 +15,7 @@
         "name": "name",
         "dbType": "string",
         "htmlType": "text",
-        "validations": "",
+        "validations": "required|string|max:100",
         "searchable": true,
         "fillable": true,
         "primary": false,
@@ -27,7 +27,7 @@
         "name": "created_at",
         "dbType": "datetime",
         "htmlType": "date",
-        "validations": "",
+        "validations": "nullable",
         "searchable": false,
         "fillable": false,
         "primary": false,
@@ -39,12 +39,20 @@
         "name": "updated_at",
         "dbType": "datetime",
         "htmlType": "date",
-        "validations": "",
+        "validations": "nullable",
         "searchable": false,
         "fillable": false,
         "primary": false,
         "inForm": false,
         "inIndex": false,
         "inView": false
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,PostTag,tag_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,UserTag,tag_id"
     }
 ]

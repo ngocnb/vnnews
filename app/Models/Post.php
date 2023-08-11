@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Post extends Model
 {
@@ -45,5 +46,18 @@ class Post extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'post_has_tags');
+    }
+
+    public function userPosts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\UserPost::class, 'post_id');
+    }
+
+    public function postTags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\PostTag::class, 'post_id');
+    }
 }

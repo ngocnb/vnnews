@@ -58,5 +58,13 @@
         "inForm": false,
         "inIndex": false,
         "inView": false
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Post,post_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Tag,tag_id"
     }
 ]

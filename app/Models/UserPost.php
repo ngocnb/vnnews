@@ -38,5 +38,13 @@ class UserPost extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Post::class, 'post_id');
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
 }

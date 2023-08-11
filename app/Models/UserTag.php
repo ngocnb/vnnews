@@ -26,5 +26,13 @@ class UserTag extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function tag(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Tag::class, 'tag_id');
+    }
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\User::class, 'user_id');
+    }
 }

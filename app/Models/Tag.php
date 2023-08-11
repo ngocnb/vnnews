@@ -22,5 +22,13 @@ class Tag extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function postTags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\PostTag::class, 'tag_id');
+    }
+
+    public function userTags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\UserTag::class, 'tag_id');
+    }
 }

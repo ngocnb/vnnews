@@ -24,5 +24,13 @@ class PostTag extends Model
         'updated_at' => 'nullable'
     ];
 
-    
+    public function post(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Post::class, 'post_id');
+    }
+
+    public function tag(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Tag::class, 'tag_id');
+    }
 }

@@ -70,5 +70,13 @@
         "inForm": false,
         "inIndex": false,
         "inView": false
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,Tag,tag_id"
+    },
+    {
+        "type": "relation",
+        "relation": "mt1,User,user_id"
     }
 ]

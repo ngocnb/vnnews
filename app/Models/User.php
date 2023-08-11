@@ -2,42 +2,26 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class User extends Authenticatable
+class User extends Model
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    public $table = 'users';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
+    public $fillable = [
         'name',
         'email',
+        'email_verified_at',
         'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+        'remember_token'
     ];
 
     protected $casts = [
         'name' => 'string',
         'email' => 'string',
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password' => 'string',
         'remember_token' => 'string'
     ];
 
@@ -51,5 +35,23 @@ class User extends Authenticatable
         'updated_at' => 'nullable'
     ];
 
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'user_tags_score');
+    }
 
+    public function posts(): MorphToMany
+    {
+        return $this->morphToMany(Post::class, 'post_interactions');
+    }
+
+    public function userPosts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\UserPost::class, 'user_id');
+    }
+
+    public function userTags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(\App\Models\UserTag::class, 'user_id');
+    }
 }
