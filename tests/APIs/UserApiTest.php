@@ -2,21 +2,20 @@
 
 namespace Tests\APIs;
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
-use Tests\ApiTestTrait;
 use App\Models\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\ApiTestTrait;
+use Tests\TestCase;
 
-class UserApiTest extends TestCase
-{
+class UserApiTest extends TestCase {
     use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
 
     /**
      * @test
+     * @group api
      */
-    public function test_create_user()
-    {
+    public function test_create_user() {
         $user = User::factory()->make()->toArray();
 
         $this->response = $this->json(
@@ -29,14 +28,14 @@ class UserApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
-    public function test_read_user()
-    {
+    public function test_read_user() {
         $user = User::factory()->create();
 
         $this->response = $this->json(
             'GET',
-            '/api/users/'.$user->id
+            '/api/users/' . $user->id
         );
 
         $this->assertApiResponse($user->toArray());
@@ -44,15 +43,15 @@ class UserApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
-    public function test_update_user()
-    {
-        $user = User::factory()->create();
+    public function test_update_user() {
+        $user       = User::factory()->create();
         $editedUser = User::factory()->make()->toArray();
 
         $this->response = $this->json(
             'PUT',
-            '/api/users/'.$user->id,
+            '/api/users/' . $user->id,
             $editedUser
         );
 
@@ -61,20 +60,20 @@ class UserApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
-    public function test_delete_user()
-    {
+    public function test_delete_user() {
         $user = User::factory()->create();
 
         $this->response = $this->json(
             'DELETE',
-             '/api/users/'.$user->id
-         );
+            '/api/users/' . $user->id
+        );
 
         $this->assertApiSuccess();
         $this->response = $this->json(
             'GET',
-            '/api/users/'.$user->id
+            '/api/users/' . $user->id
         );
 
         $this->response->assertStatus(404);

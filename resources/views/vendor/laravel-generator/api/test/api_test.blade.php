@@ -16,6 +16,7 @@ class {{ $config->modelNames->name }}ApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
     public function test_create_{{ $config->modelNames->snake }}()
     {
@@ -31,6 +32,7 @@ class {{ $config->modelNames->name }}ApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
     public function test_read_{{ $config->modelNames->snake }}()
     {
@@ -46,6 +48,7 @@ class {{ $config->modelNames->name }}ApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
     public function test_update_{{ $config->modelNames->snake }}()
     {
@@ -63,6 +66,7 @@ class {{ $config->modelNames->name }}ApiTest extends TestCase
 
     /**
      * @test
+     * @group api
      */
     public function test_delete_{{ $config->modelNames->snake }}()
     {
