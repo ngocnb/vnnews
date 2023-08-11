@@ -24,3 +24,6 @@ Route::resource('posts', App\Http\Controllers\API\PostAPIController::class)
 
 Route::resource('users', App\Http\Controllers\API\UserAPIController::class)
     ->except(['create', 'edit']);
+
+Route::resource('tags', App\Http\Controllers\API\TagAPIController::class)
+    ->except(['create', 'edit']);
