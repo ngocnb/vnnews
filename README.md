@@ -7,6 +7,6 @@
 ## Generate test coverage
 
 ```
-./vendor/bin/pest --coverage-clover clover.xml 
-./vendor/bin/php-coverage-badger clover.xml badge-coverage.svg
+./vendor/bin/pest --coverage-clover reports/clover.xml 
+./vendor/bin/php-coverage-badger clover.xml reports/badge-coverage.svg
 ```
