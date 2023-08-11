@@ -2,44 +2,54 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class User extends Authenticatable
-{
-    use HasApiTokens, HasFactory, Notifiable;
+class User extends Model {
+    use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
+    public $table = 'users';
+
+    public $fillable = [
         'name',
         'email',
-        'password',
-    ];
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
+        'email_verified_at',
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
+        'name'              => 'string',
+        'email'             => 'string',
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'string',
+        'remember_token'    => 'string',
     ];
+
+    public static array $rules = [
+        'name'              => 'required|string|max:255',
+        'email'             => 'required|string|max:255',
+        'email_verified_at' => 'nullable',
+        'password'          => 'required|string|max:255',
+        'remember_token'    => 'nullable|string|max:100',
+        'created_at'        => 'nullable',
+        'updated_at'        => 'nullable',
+    ];
+
+    public function tags(): MorphToMany {
+        return $this->morphToMany(Tag::class, 'user_tags_score');
+    }
+
+    public function posts(): MorphToMany {
+        return $this->morphToMany(Post::class, 'post_interactions');
+    }
+
+    public function userPosts(): \Illuminate\Database\Eloquent\Relations\HasMany {
+        return $this->hasMany(\App\Models\UserPost::class, 'user_id');
+    }
+
+    public function userTags(): \Illuminate\Database\Eloquent\Relations\HasMany {
+        return $this->hasMany(\App\Models\UserTag::class, 'user_id');
+    }
 }
