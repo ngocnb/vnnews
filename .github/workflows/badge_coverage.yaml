@@ -2,7 +2,7 @@ name: Test Coverage PHP Package
 on:
   push:
     branches:
-      - 23-coverage-badge
+      - main
 
 jobs:
   laravel-tests:
