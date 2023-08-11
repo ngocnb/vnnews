@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable(false);
             $table->unsignedBigInteger('tag_id')->nullable(false);
-            $table->integer('score')->nullable(false)->default(0);
+            $table->integer('score')->nullable(true)->default(0);
             $table->timestamps();
         });
     }
