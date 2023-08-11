@@ -33,13 +33,23 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
+        'name' => 'string',
+        'email' => 'string',
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'remember_token' => 'string'
     ];
+
+    public static array $rules = [
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|max:255',
+        'email_verified_at' => 'nullable',
+        'password' => 'required|string|max:255',
+        'remember_token' => 'nullable|string|max:100',
+        'created_at' => 'nullable',
+        'updated_at' => 'nullable'
+    ];
+
+
 }
