@@ -22,6 +22,7 @@ class Post extends Model {
         'score_like',
         'score_hot',
         'is_new',
+
     ];
 
     protected $casts = [
