@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AppBaseController;
 
+
 /**
  * Class PostAPIController
  */
@@ -33,7 +34,6 @@ class PostAPIController extends AppBaseController
             $request->get('skip'),
             $request->get('limit')
         );
-
         return $this->sendResponse($posts->toArray(), 'Posts retrieved successfully');
     }
 
