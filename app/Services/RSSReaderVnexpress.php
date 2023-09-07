@@ -4,18 +4,23 @@ namespace App\Services;
 
 use Goutte\Client;
 use Vedmant\FeedReader\FeedReader;
-use App\Models\Tag;
-use App\Models\Post;
-use App\Models\PostTag;
+
+use App\Repositories\PostRepository;
+use App\Repositories\TagRepository;
 
 use Symfony\Component\Panther\PantherTestCase;
 
 class RSSReaderVnexpress {
 
     protected $feedReader;
+    private PostRepository $postRepository;
+    private TagRepository $tagRepository;
 
-    public function __construct(FeedReader $feedReader) {
+    public function __construct(FeedReader $feedReader,PostRepository $postRepo,TagRepository $tagRepo) {
         $this->feedReader = $feedReader;
+        $this->postRepository = $postRepo;
+        $this->tagRepository = $tagRepo;
+
     }
 
     public function run() {
@@ -47,14 +52,16 @@ class RSSReaderVnexpress {
             $data['title']       = $item->get_title();
             $data['description'] = $item->get_description();
             $data['link']        = $item->get_link();
-            if(strpos($data['link'], 'video.vnexpress') === false && strlen($data['description']) <= 500 ){
-                $data['content']     = $this->getContentFromLink($data['link']);
-                $data['tag']        = $this->getTagFromLink($data['link']);
-                $this->saveContentToDatabase($data['title'], $data['description'], $data['link'], $data['content'], $data['tag'],$score_hot);
+            $data['score']  = $score_hot; 
+            if(strpos($data['link'], 'video.vnexpress') === false){
+                $d = $this->getContentFromLink($data['link']);
+                $data['content']     = $d['content'];
+                $tag       =  $d['tag'];
+                $data['score_time'] = 500;
+                $this->saveContentToDatabase($data,$tag);
                 $result[] = $data;
             }
         }
-
         return $result;
     }
 
@@ -67,32 +74,24 @@ class RSSReaderVnexpress {
     public function getContentFromLink( ? string $link) {
         $client  = new Client();
         $crawler = $client->request('GET', $link);
-        dump($link);
 
+        $data = [];
         // Find elements with class 'fck_detail' and extract their content
-        $content = $crawler->filter('.fck_detail')->html();
-        return $content;
-    }
-
-    public function saveContentToDatabase($title,$description, $link,$content = null,$tag,$score_hot){
-        if(Post::where('link',$link)->get()->toArray() == []){
-            $posts = Post::create(['title'=>$title,'description'=>$description,'link'=>$link,'content'=>$content,'score_time'=>500,'score_hot' => $score_hot]);
-            foreach ($tag as $key => $value) {
-                $post_id = $posts->id;
-                $tag_id = Tag::where('name',$value)->first()->id;
-                PostTag::create(['post_id'=>$post_id,'tag_id'=>$tag_id]);
-            }
-        }
-    }
-
-    public function getTagFromLink(? string $link){
-        $client  = new Client();
-        $crawler = $client->request('GET', $link);
-        $tags = [];
-        $tags = $crawler->filter('ul.breadcrumb > li > a')->each(function ($node) {
-            if(Tag::where('name',$node->text())->get()->toArray() == []) Tag::create(['name'=>$node->text()]);
+        $data['content'] = $crawler->filter('.fck_detail')->html();
+        $data['tag'] = $crawler->filter('ul.breadcrumb > li > a')->each(function ($node) {
+            if($this->tagRepository->findTagByName($node->text()) == null) $this->tagRepository->create(['name'=>$node->text()]);
             return $node->text();
         });
-        return $tags;
+
+        return $data;
+    }
+    public function saveContentToDatabase($data,$tag){
+        if($this->postRepository->findPostByLink($data['link']) == null){
+            $posts = $this->postRepository->create($data);
+            foreach ($tag as $key => $tag_name) {
+                $tag_id = $this->tagRepository->findTagByName($tag_name)->id;
+                $posts->tags()->attach($tag_id);
+            }
+        }
     }
 }

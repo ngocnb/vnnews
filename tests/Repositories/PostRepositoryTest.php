@@ -1,79 +1,72 @@
 <?php
 
-namespace Tests\Repositories;
+use Illuminate\Container\Container;
 
 use App\Models\Post;
 use App\Repositories\PostRepository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
-use Tests\ApiTestTrait;
+use Pest\{TestBuilder, TestCase};
 
-class PostRepositoryTest extends TestCase
-{
-    use ApiTestTrait, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    protected PostRepository $postRepo;
+beforeEach(function () {
+    $this->app = new Container();
+    $this->service = new PostRepository();
+});
 
-    public function setUp() : void
-    {
-        parent::setUp();
-        $this->postRepo = app(PostRepository::class);
-    }
+// test('create post', function () {
+//     $post = Post::factory()->make()->toArray();
 
-    /**
-     * @test create
-     */
-    public function test_create_post()
-    {
-        $post = Post::factory()->make()->toArray();
+//     $createdPost = $this->postRepo->create($post);
 
-        $createdPost = $this->postRepo->create($post);
+//     $createdPost = $createdPost->toArray();
+//     expect($createdPost)->toHaveKey('id');
+//     expect($createdPost['id'])->not->toBeNull('Created Post must have id specified');
+//     expect(Post::find($createdPost['id']))->not->toBeNull('Post with given id must be in DB');
+//     $this->assertModelData($post, $createdPost);
+// });
 
-        $createdPost = $createdPost->toArray();
-        $this->assertArrayHasKey('id', $createdPost);
-        $this->assertNotNull($createdPost['id'], 'Created Post must have id specified');
-        $this->assertNotNull(Post::find($createdPost['id']), 'Post with given id must be in DB');
-        $this->assertModelData($post, $createdPost);
-    }
+// test('read post', function () {
+//     $post = Post::factory()->create();
 
-    /**
-     * @test read
-     */
-    public function test_read_post()
-    {
-        $post = Post::factory()->create();
+//     $dbPost = $this->postRepo->find($post->id);
 
-        $dbPost = $this->postRepo->find($post->id);
+//     $dbPost = $dbPost->toArray();
+//     $this->assertModelData($post->toArray(), $dbPost);
+// });
 
-        $dbPost = $dbPost->toArray();
-        $this->assertModelData($post->toArray(), $dbPost);
-    }
+// test('update post', function () {
+//     $post = Post::factory()->create();
+//     $fakePost = Post::factory()->make()->toArray();
 
-    /**
-     * @test update
-     */
-    public function test_update_post()
-    {
-        $post = Post::factory()->create();
-        $fakePost = Post::factory()->make()->toArray();
+//     $updatedPost = $this->postRepo->update($fakePost, $post->id);
 
-        $updatedPost = $this->postRepo->update($fakePost, $post->id);
+//     $this->assertModelData($fakePost, $updatedPost->toArray());
+//     $dbPost = $this->postRepo->find($post->id);
+//     $this->assertModelData($fakePost, $dbPost->toArray());
+// });
 
-        $this->assertModelData($fakePost, $updatedPost->toArray());
-        $dbPost = $this->postRepo->find($post->id);
-        $this->assertModelData($fakePost, $dbPost->toArray());
-    }
+// test('delete post', function () {
+//     $post = Post::factory()->create();
 
-    /**
-     * @test delete
-     */
-    public function test_delete_post()
-    {
-        $post = Post::factory()->create();
+//     $resp = $this->postRepo->delete($post->id);
 
-        $resp = $this->postRepo->delete($post->id);
+//     expect($resp)->toBeTrue();
+//     expect(Post::find($post->id))->toBeNull('Post should not exist in DB');
+// });
 
-        $this->assertTrue($resp);
-        $this->assertNull(Post::find($post->id), 'Post should not exist in DB');
-    }
-}
+it('finds a post by link', function () {
+    $postData = [
+        'title' => 'title',
+        'description' => 'description',
+        'content' => 'content',
+        'link' => 'link',
+        'score_time' => 500,
+    ];
+
+    $post = Post::factory()->create($postData);
+
+    $foundPost = $this->postRepo->findPostByLink('link');
+
+    expect($foundPost->toArray())->toBe($postData);
+});

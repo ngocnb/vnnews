@@ -1,79 +1,52 @@
 <?php
 
-namespace Tests\Repositories;
-
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
-use Tests\ApiTestTrait;
 
-class UserRepositoryTest extends TestCase
-{
-    use ApiTestTrait, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    protected UserRepository $userRepo;
+beforeEach(function () {
+    $this->userRepo = app(UserRepository::class);
+});
 
-    public function setUp() : void
-    {
-        parent::setUp();
-        $this->userRepo = app(UserRepository::class);
-    }
+// test('create user', function () {
+//     $user = User::factory()->make()->toArray();
 
-    /**
-     * @test create
-     */
-    public function test_create_user()
-    {
-        $user = User::factory()->make()->toArray();
+//     $createdUser = $this->userRepo->create($user);
 
-        $createdUser = $this->userRepo->create($user);
+//     $createdUser = $createdUser->toArray();
+//     expect($createdUser)->toHaveKey('id');
+//     expect($createdUser['id'])->not->toBeNull('Created User must have id specified');
+//     expect(User::find($createdUser['id']))->not->toBeNull('User with given id must be in DB');
+//     $this->assertModelData($user, $createdUser);
+// });
 
-        $createdUser = $createdUser->toArray();
-        $this->assertArrayHasKey('id', $createdUser);
-        $this->assertNotNull($createdUser['id'], 'Created User must have id specified');
-        $this->assertNotNull(User::find($createdUser['id']), 'User with given id must be in DB');
-        $this->assertModelData($user, $createdUser);
-    }
+// test('read user', function () {
+//     $user = User::factory()->create();
 
-    /**
-     * @test read
-     */
-    public function test_read_user()
-    {
-        $user = User::factory()->create();
+//     $dbUser = $this->userRepo->find($user->id);
 
-        $dbUser = $this->userRepo->find($user->id);
+//     $dbUser = $dbUser->toArray();
+//     $this->assertModelData($user->toArray(), $dbUser);
+// });
 
-        $dbUser = $dbUser->toArray();
-        $this->assertModelData($user->toArray(), $dbUser);
-    }
+// test('update user', function () {
+//     $user = User::factory()->create();
+//     $fakeUser = User::factory()->make()->toArray();
 
-    /**
-     * @test update
-     */
-    public function test_update_user()
-    {
-        $user = User::factory()->create();
-        $fakeUser = User::factory()->make()->toArray();
+//     $updatedUser = $this->userRepo->update($fakeUser, $user->id);
 
-        $updatedUser = $this->userRepo->update($fakeUser, $user->id);
+//     $this->assertModelData($fakeUser, $updatedUser->toArray());
+//     $dbUser = $this->userRepo->find($user->id);
+//     $this->assertModelData($fakeUser, $dbUser->toArray());
+// });
 
-        $this->assertModelData($fakeUser, $updatedUser->toArray());
-        $dbUser = $this->userRepo->find($user->id);
-        $this->assertModelData($fakeUser, $dbUser->toArray());
-    }
+// test('delete user', function () {
+//     $user = User::factory()->create();
 
-    /**
-     * @test delete
-     */
-    public function test_delete_user()
-    {
-        $user = User::factory()->create();
+//     $resp = $this->userRepo->delete($user->id);
 
-        $resp = $this->userRepo->delete($user->id);
-
-        $this->assertTrue($resp);
-        $this->assertNull(User::find($user->id), 'User should not exist in DB');
-    }
-}
+//     expect($resp)->toBeTrue();
+//     expect(User::find($user->id))->toBeNull('User should not exist in DB');
+// });

@@ -1,0 +1,80 @@
+.header {
+}
+.logo {
+    width: 15%;
+    text-align: center;
+}
+.logo a,
+.account a {
+    text-decoration: none;
+    color: black;
+}
+.logo h1 {
+    margin: 0;
+}
+.search {
+    border: 0.5px solid #c0c0c0;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    text-align: center;
+}
+.search .icon {
+    margin: auto;
+    padding: 6px;
+}
+.search svg {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+.search input[type="text"] {
+    width: 100%;
+    float: right;
+    padding: 6px;
+    border: none;
+    font-size: 17px;
+}
+.search input[type="text"]:hover {
+    /* background-color: black; */
+}
+.search input[type="text"]:focus {
+    /* background-color: black; */
+    outline: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search {
+    width: 65%;
+    margin-right: auto;
+}
+
+.account {
+    width: 20%;
+    display: flex;
+    align-items: center;
+}
+.account .login {
+    width: 35%;
+    border: 0.5px solid #c0c0c0;
+    border-radius: 50%;
+    margin-left: auto;
+}
+.account .signup a,
+.account .login a {
+    text-align: center;
+}
+.account .signup {
+    width: 35%;
+    border: 0.5px solid #c0c0c0;
+    border-radius: 50%;
+    margin-right: auto;
+}
+.account div {
+    margin-left: 15px;
+}

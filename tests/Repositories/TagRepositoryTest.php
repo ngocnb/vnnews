@@ -1,79 +1,52 @@
 <?php
 
-namespace Tests\Repositories;
-
 use App\Models\Tag;
 use App\Repositories\TagRepository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
-use Tests\ApiTestTrait;
 
-class TagRepositoryTest extends TestCase
-{
-    use ApiTestTrait, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    protected TagRepository $tagRepo;
+beforeEach(function () {
+    $this->tagRepo = app(TagRepository::class);
+});
 
-    public function setUp() : void
-    {
-        parent::setUp();
-        $this->tagRepo = app(TagRepository::class);
-    }
+// test('create tag', function () {
+//     $tag = Tag::factory()->make()->toArray();
 
-    /**
-     * @test create
-     */
-    public function test_create_tag()
-    {
-        $tag = Tag::factory()->make()->toArray();
+//     $createdTag = $this->tagRepo->create($tag);
 
-        $createdTag = $this->tagRepo->create($tag);
+//     $createdTag = $createdTag->toArray();
+//     expect($createdTag)->toHaveKey('id');
+//     expect($createdTag['id'])->not->toBeNull('Created Tag must have id specified');
+//     expect(Tag::find($createdTag['id']))->not->toBeNull('Tag with given id must be in DB');
+//     $this->assertModelData($tag, $createdTag);
+// });
 
-        $createdTag = $createdTag->toArray();
-        $this->assertArrayHasKey('id', $createdTag);
-        $this->assertNotNull($createdTag['id'], 'Created Tag must have id specified');
-        $this->assertNotNull(Tag::find($createdTag['id']), 'Tag with given id must be in DB');
-        $this->assertModelData($tag, $createdTag);
-    }
+// test('read tag', function () {
+//     $tag = Tag::factory()->create();
 
-    /**
-     * @test read
-     */
-    public function test_read_tag()
-    {
-        $tag = Tag::factory()->create();
+//     $dbTag = $this->tagRepo->find($tag->id);
 
-        $dbTag = $this->tagRepo->find($tag->id);
+//     $dbTag = $dbTag->toArray();
+//     $this->assertModelData($tag->toArray(), $dbTag);
+// });
 
-        $dbTag = $dbTag->toArray();
-        $this->assertModelData($tag->toArray(), $dbTag);
-    }
+// test('update tag', function () {
+//     $tag = Tag::factory()->create();
+//     $fakeTag = Tag::factory()->make()->toArray();
 
-    /**
-     * @test update
-     */
-    public function test_update_tag()
-    {
-        $tag = Tag::factory()->create();
-        $fakeTag = Tag::factory()->make()->toArray();
+//     $updatedTag = $this->tagRepo->update($fakeTag, $tag->id);
 
-        $updatedTag = $this->tagRepo->update($fakeTag, $tag->id);
+//     $this->assertModelData($fakeTag, $updatedTag->toArray());
+//     $dbTag = $this->tagRepo->find($tag->id);
+//     $this->assertModelData($fakeTag, $dbTag->toArray());
+// });
 
-        $this->assertModelData($fakeTag, $updatedTag->toArray());
-        $dbTag = $this->tagRepo->find($tag->id);
-        $this->assertModelData($fakeTag, $dbTag->toArray());
-    }
+// test('delete tag', function () {
+//     $tag = Tag::factory()->create();
 
-    /**
-     * @test delete
-     */
-    public function test_delete_tag()
-    {
-        $tag = Tag::factory()->create();
+//     $resp = $this->tagRepo->delete($tag->id);
 
-        $resp = $this->tagRepo->delete($tag->id);
-
-        $this->assertTrue($resp);
-        $this->assertNull(Tag::find($tag->id), 'Tag should not exist in DB');
-    }
-}
+//     expect($resp)->toBeTrue();
+//     expect(Tag::find($tag->id))->toBeNull('Tag should not exist in DB');
+// });

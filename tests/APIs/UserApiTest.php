@@ -1,81 +1,59 @@
 <?php
 
-namespace Tests\APIs;
-
 use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\ApiTestTrait;
-use Tests\TestCase;
 
-class UserApiTest extends TestCase {
-    use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\WithoutMiddleware::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_create_user() {
-        $user = User::factory()->make()->toArray();
+test('create user', function () {
+    $user = User::factory()->make()->toArray();
 
-        $this->response = $this->json(
-            'POST',
-            '/api/users', $user
-        );
+    $this->response = $this->json(
+        'POST',
+        '/api/users', $user
+    );
 
-        $this->assertApiResponse($user);
-    }
+    $this->assertApiResponse($user);
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_read_user() {
-        $user = User::factory()->create();
+test('read user', function () {
+    $user = User::factory()->create();
 
-        $this->response = $this->json(
-            'GET',
-            '/api/users/' . $user->id
-        );
+    $this->response = $this->json(
+        'GET',
+        '/api/users/' . $user->id
+    );
 
-        $this->assertApiResponse($user->toArray());
-    }
+    $this->assertApiResponse($user->toArray());
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_update_user() {
-        $user       = User::factory()->create();
-        $editedUser = User::factory()->make()->toArray();
+test('update user', function () {
+    $user       = User::factory()->create();
+    $editedUser = User::factory()->make()->toArray();
 
-        $this->response = $this->json(
-            'PUT',
-            '/api/users/' . $user->id,
-            $editedUser
-        );
+    $this->response = $this->json(
+        'PUT',
+        '/api/users/' . $user->id,
+        $editedUser
+    );
 
-        $this->assertApiResponse($editedUser);
-    }
+    $this->assertApiResponse($editedUser);
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_delete_user() {
-        $user = User::factory()->create();
+test('delete user', function () {
+    $user = User::factory()->create();
 
-        $this->response = $this->json(
-            'DELETE',
-            '/api/users/' . $user->id
-        );
+    $this->response = $this->json(
+        'DELETE',
+        '/api/users/' . $user->id
+    );
 
-        $this->assertApiSuccess();
-        $this->response = $this->json(
-            'GET',
-            '/api/users/' . $user->id
-        );
+    $this->assertApiSuccess();
+    $this->response = $this->json(
+        'GET',
+        '/api/users/' . $user->id
+    );
 
-        $this->response->assertStatus(404);
-    }
-}
+    $this->response->assertStatus(404);
+})->group('api');

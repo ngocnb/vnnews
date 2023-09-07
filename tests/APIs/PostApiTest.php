@@ -1,81 +1,59 @@
 <?php
 
-namespace Tests\APIs;
-
 use App\Models\Post;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\ApiTestTrait;
-use Tests\TestCase;
 
-class PostApiTest extends TestCase {
-    use ApiTestTrait, WithoutMiddleware, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\WithoutMiddleware::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_create_post() {
-        $post = Post::factory()->make()->toArray();
+test('create post', function () {
+    $post = Post::factory()->make()->toArray();
 
-        $this->response = $this->json(
-            'POST',
-            '/api/posts', $post
-        );
+    $this->response = $this->json(
+        'POST',
+        '/api/posts', $post
+    );
 
-        $this->assertApiResponse($post);
-    }
+    $this->assertApiResponse($post);
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_read_post() {
-        $post = Post::factory()->create();
+test('read post', function () {
+    $post = Post::factory()->create();
 
-        $this->response = $this->json(
-            'GET',
-            '/api/posts/' . $post->id
-        );
+    $this->response = $this->json(
+        'GET',
+        '/api/posts/' . $post->id
+    );
 
-        $this->assertApiResponse($post->toArray());
-    }
+    $this->assertApiResponse($post->toArray());
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_update_post() {
-        $post       = Post::factory()->create();
-        $editedPost = Post::factory()->make()->toArray();
+test('update post', function () {
+    $post       = Post::factory()->create();
+    $editedPost = Post::factory()->make()->toArray();
 
-        $this->response = $this->json(
-            'PUT',
-            '/api/posts/' . $post->id,
-            $editedPost
-        );
+    $this->response = $this->json(
+        'PUT',
+        '/api/posts/' . $post->id,
+        $editedPost
+    );
 
-        $this->assertApiResponse($editedPost);
-    }
+    $this->assertApiResponse($editedPost);
+})->group('api');
 
-    /**
-     * @test
-     * @group api
-     */
-    public function test_delete_post() {
-        $post = Post::factory()->create();
+test('delete post', function () {
+    $post = Post::factory()->create();
 
-        $this->response = $this->json(
-            'DELETE',
-            '/api/posts/' . $post->id
-        );
+    $this->response = $this->json(
+        'DELETE',
+        '/api/posts/' . $post->id
+    );
 
-        $this->assertApiSuccess();
-        $this->response = $this->json(
-            'GET',
-            '/api/posts/' . $post->id
-        );
+    $this->assertApiSuccess();
+    $this->response = $this->json(
+        'GET',
+        '/api/posts/' . $post->id
+    );
 
-        $this->response->assertStatus(404);
-    }
-}
+    $this->response->assertStatus(404);
+})->group('api');

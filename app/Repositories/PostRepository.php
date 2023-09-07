@@ -29,4 +29,8 @@ class PostRepository extends BaseRepository
     {
         return Post::class;
     }
-}
+
+    public function findPostByLink($link){
+        return $this->model->where('link',$link)->first();
+    }
+}  

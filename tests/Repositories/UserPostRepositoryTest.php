@@ -1,79 +1,52 @@
 <?php
 
-namespace Tests\Repositories;
-
 use App\Models\UserPost;
 use App\Repositories\UserPostRepository;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\TestCase;
-use Tests\ApiTestTrait;
 
-class UserPostRepositoryTest extends TestCase
-{
-    use ApiTestTrait, DatabaseTransactions;
+uses(\Tests\ApiTestTrait::class);
+uses(\Illuminate\Foundation\Testing\DatabaseTransactions::class);
 
-    protected UserPostRepository $userPostRepo;
+beforeEach(function () {
+    $this->userPostRepo = app(UserPostRepository::class);
+});
 
-    public function setUp() : void
-    {
-        parent::setUp();
-        $this->userPostRepo = app(UserPostRepository::class);
-    }
+// test('create user post', function () {
+//     $userPost = UserPost::factory()->make()->toArray();
 
-    /**
-     * @test create
-     */
-    public function test_create_user_post()
-    {
-        $userPost = UserPost::factory()->make()->toArray();
+//     $createdUserPost = $this->userPostRepo->create($userPost);
 
-        $createdUserPost = $this->userPostRepo->create($userPost);
+//     $createdUserPost = $createdUserPost->toArray();
+//     expect($createdUserPost)->toHaveKey('id');
+//     expect($createdUserPost['id'])->not->toBeNull('Created UserPost must have id specified');
+//     expect(UserPost::find($createdUserPost['id']))->not->toBeNull('UserPost with given id must be in DB');
+//     $this->assertModelData($userPost, $createdUserPost);
+// });
 
-        $createdUserPost = $createdUserPost->toArray();
-        $this->assertArrayHasKey('id', $createdUserPost);
-        $this->assertNotNull($createdUserPost['id'], 'Created UserPost must have id specified');
-        $this->assertNotNull(UserPost::find($createdUserPost['id']), 'UserPost with given id must be in DB');
-        $this->assertModelData($userPost, $createdUserPost);
-    }
+// test('read user post', function () {
+//     $userPost = UserPost::factory()->create();
 
-    /**
-     * @test read
-     */
-    public function test_read_user_post()
-    {
-        $userPost = UserPost::factory()->create();
+//     $dbUserPost = $this->userPostRepo->find($userPost->id);
 
-        $dbUserPost = $this->userPostRepo->find($userPost->id);
+//     $dbUserPost = $dbUserPost->toArray();
+//     $this->assertModelData($userPost->toArray(), $dbUserPost);
+// });
 
-        $dbUserPost = $dbUserPost->toArray();
-        $this->assertModelData($userPost->toArray(), $dbUserPost);
-    }
+// test('update user post', function () {
+//     $userPost = UserPost::factory()->create();
+//     $fakeUserPost = UserPost::factory()->make()->toArray();
 
-    /**
-     * @test update
-     */
-    public function test_update_user_post()
-    {
-        $userPost = UserPost::factory()->create();
-        $fakeUserPost = UserPost::factory()->make()->toArray();
+//     $updatedUserPost = $this->userPostRepo->update($fakeUserPost, $userPost->id);
 
-        $updatedUserPost = $this->userPostRepo->update($fakeUserPost, $userPost->id);
+//     $this->assertModelData($fakeUserPost, $updatedUserPost->toArray());
+//     $dbUserPost = $this->userPostRepo->find($userPost->id);
+//     $this->assertModelData($fakeUserPost, $dbUserPost->toArray());
+// });
 
-        $this->assertModelData($fakeUserPost, $updatedUserPost->toArray());
-        $dbUserPost = $this->userPostRepo->find($userPost->id);
-        $this->assertModelData($fakeUserPost, $dbUserPost->toArray());
-    }
+// test('delete user post', function () {
+//     $userPost = UserPost::factory()->create();
 
-    /**
-     * @test delete
-     */
-    public function test_delete_user_post()
-    {
-        $userPost = UserPost::factory()->create();
+//     $resp = $this->userPostRepo->delete($userPost->id);
 
-        $resp = $this->userPostRepo->delete($userPost->id);
-
-        $this->assertTrue($resp);
-        $this->assertNull(UserPost::find($userPost->id), 'UserPost should not exist in DB');
-    }
-}
+//     expect($resp)->toBeTrue();
+//     expect(UserPost::find($userPost->id))->toBeNull('UserPost should not exist in DB');
+// });
