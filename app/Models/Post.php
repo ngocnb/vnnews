@@ -35,7 +35,7 @@ class Post extends Model {
 
     public static array $rules = [
         'title'       => 'required|string|max:255',
-        'description' => 'nullable|string|max:65535',
+        'description' => 'required|string|max:65535',
         'link'        => 'required|string|max:1000',
         'source'      => 'required|boolean',
         'content'     => 'nullable|string|max:65535',
