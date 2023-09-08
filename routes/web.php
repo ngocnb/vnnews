@@ -18,6 +18,8 @@ Route::get('/', [PostAPIController::class, 'homePage']);
 
 Route::get('/homepage/{action?}/{page?}', [PostAPIController::class, 'homePage'])->name('homepage');
 
+Route::get('/postdetailpage/{id}', [PostAPIController::class, 'postDetailPage'])->name('postdetailpage');
+
 Route::get('/login', function () {
     return view('user.login');
 });

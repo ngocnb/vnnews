@@ -124,4 +124,5 @@ class PostAPIController extends AppBaseController
         $latest_news = $this->postRepository->getLatestNews($page);
         return view('user.homepage', ['latest_news' => $latest_news, 'hot_news' => $hot_news, 'page' => $page]);
     }
+
 }
