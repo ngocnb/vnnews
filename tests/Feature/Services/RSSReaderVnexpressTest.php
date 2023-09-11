@@ -62,7 +62,6 @@ test('it can save content to the database', function () {
 
         expect($tag)->not->toBeNull();
         expect($post->tags->contains($tag))->toBeTrue();
-
     }
 });
 

@@ -39,13 +39,14 @@ class PostRepository extends BaseRepository
 
     public function getTotalPages()
     {
-        $totalPages = ceil($this->model->where('score_hot', '>', 0)->orderByRaw("created_at desc")->get()->count() / 10);
-        return $totalPages;
+        return ceil($this->model
+        ->where('score_hot', '>', 0)
+        ->count() / 10);
     }
 
     public function getLatestNews($page)
     {
-        $latest_news = $this->model->where('score_hot', '>', 0)->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->with('tags')->get();
+        $latest_news = $this->model->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->with('tags')->get();
         foreach ($latest_news as $post) {
             $tag_names = $post->tags->pluck('name')->toArray();
             $post->tag_names = $tag_names;
@@ -55,7 +56,7 @@ class PostRepository extends BaseRepository
 
     public function getHotNews()
     {
-        $hot_news = $this->model->orderByRaw("created_at desc")->take(10)->with('tags')->get();
+        $hot_news = $this->model->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->with('tags')->get();
         foreach ($hot_news as $post) {
             $tag_names = $post->tags->pluck('name')->toArray();
             $post->tag_names = $tag_names;

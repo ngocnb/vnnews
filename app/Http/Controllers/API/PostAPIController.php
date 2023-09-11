@@ -117,7 +117,7 @@ class PostAPIController extends AppBaseController
             }
         } elseif ($action == 'prev') {
             $page--;
-            if ($page < 0) {
+            if ($page == 0) {
                 $page = $totalPages;
             }
         }
