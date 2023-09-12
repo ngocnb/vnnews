@@ -99,30 +99,33 @@ class PostAPIController extends AppBaseController
         if (empty($post)) {
             return $this->sendError('Post not found');
         }
-
         $post->delete();
-
         return $this->sendSuccess('Post deleted successfully');
     }
 
-    public function homePage($action = null, $page = 1)
-    {
-        $hot_news = $this->postRepository->getHotNews();
-        $totalPages = $this->postRepository->getTotalPages();
-        if ($action == null) {
-        } elseif ($action == 'next') {
-            $page++;
-            if ($page > $totalPages) {
-                $page = 1;
-            }
-        } elseif ($action == 'prev') {
-            $page--;
-            if ($page == 0) {
-                $page = $totalPages;
-            }
+    public function loadData(Request $request){
+        $read_news_id = json_decode($request->read_news_id);
+        //read news
+        $read_news = $this->postRepository->getReadNews($read_news_id);
+        $read_news_html = "<h2>Tin đã đọc</h2>";
+        if($read_news != null){
+            $read_news_html = view('user.homepage.frame_news', ['news' => $read_news])->render();
         }
-        $latest_news = $this->postRepository->getLatestNews($page);
-        return view('user.homepage', ['latest_news' => $latest_news, 'hot_news' => $hot_news, 'page' => $page]);
+        //hot news
+        $hot_news = $this->postRepository->getHotNews($read_news_id);
+        $hot_news_html = "<h2>Tin hot</h2>";
+        $hot_news_html .= view('user.homepage.frame_news', ['news' => $hot_news])->render();
+        //latest news
+        $page = $request->page;
+        $latest_news = $this->postRepository->getLatestNews($page,$read_news_id);
+        $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news,'page' => $page])->render();
+        //total Pages
+        $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
+        return response()->json(['read_news' => $read_news_html,'latest_news' => $latest_news_html,'hot_news' => $hot_news_html,'total_pages'=>$total_pages]);
     }
 
+    public function getNewsById($id){
+        $post = $this->postRepository->getNewsById($id);
+        return response()->json(['news' => $post]);
+    }
 }

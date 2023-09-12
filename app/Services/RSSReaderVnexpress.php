@@ -52,7 +52,7 @@ class RSSReaderVnexpress {
             $data['title']       = $item->get_title();
             $data['description'] = $item->get_description();
             $data['link']        = $item->get_link();
-            $data['score']  = $score_hot; 
+            $data['score_hot']  = $score_hot; 
             if(strpos($data['link'], 'video.vnexpress') === false){
                 $d = $this->getContentFromLink($data['link']);
                 $data['content']     = $d['content'];

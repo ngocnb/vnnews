@@ -94,7 +94,8 @@
     border-left: 1px solid #c0c0c0;
     width: 30%;
 }
-.content .right .hot-news {
+.content .right .hot-news,
+.content .right .read-news {
     padding: 10px 40px;
     border-bottom: 1px solid #c0c0c0;
 }
@@ -147,12 +148,13 @@
     color: #c0c0c0;
 }
 
+
 #postModal {
     display: none;
 }
 .modal-content {
-    width: 1000px;
-    right: 50%;
+    width: 1349px;
+    right: 415px;
 }
 .modal-body .tags .tag {
     cursor: pointer;

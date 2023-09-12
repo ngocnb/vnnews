@@ -14,16 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/', [PostAPIController::class, 'homePage']);
+ Route::get('/', function () {
+    return view('user.homepage');
+});
 
-Route::get('/homepage/{action?}/{page?}', [PostAPIController::class, 'homePage'])->name('homepage');
+Route::get('/homepage', function () {
+    return view('user.homepage');
+});
+
 
 Route::get('/postdetailpage/{id}', [PostAPIController::class, 'postDetailPage'])->name('postdetailpage');
 
 Route::get('/login', function () {
     return view('user.login');
 });
-
 Route::get('/signup', function () {
     return view('user.signup');
 });

@@ -2,6 +2,7 @@
 
 return [
     'vnexpress' => [
+        'tin-noi-bat' => 'https://vnexpress.net/rss/tin-noi-bat.rss',
         'the-gioi'   => 'https://vnexpress.net/rss/the-gioi.rss',
         'thoi-su'    => 'https://vnexpress.net/rss/thoi-su.rss',
         'kinh-doanh' => 'https://vnexpress.net/rss/kinh-doanh.rss',
@@ -18,6 +19,5 @@ return [
         'oto-xe-may' => 'https://vnexpress.net/rss/oto-xe-may.rss',
         'tam-su'     => 'https://vnexpress.net/rss/tam-su.rss',
         'cuoi'       => 'https://vnexpress.net/rss/cuoi.rss',
-       'tin-noi-bat' => 'https://vnexpress.net/rss/tin-noi-bat.rss',
     ],
 ];

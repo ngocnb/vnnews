@@ -37,30 +37,33 @@ class PostRepository extends BaseRepository
         return $this->model->where('link', $link)->first();
     }
 
-    public function getTotalPages()
+    public function getTotalPages($count)
     {
-        return ceil($this->model
-        ->where('score_hot', '>', 0)
-        ->count() / 10);
+        return ceil(($this->model
+        ->count() - $count) / 10);
     }
 
-    public function getLatestNews($page)
+    public function getReadNews($read_news_id){
+        $read_news = $this->model->whereIn('id',$read_news_id)->orderByRaw("created_at desc")->take(10)->get();
+        return $read_news;
+    }
+
+    public function getLatestNews($page,$read_news_id)
     {
-        $latest_news = $this->model->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->with('tags')->get();
-        foreach ($latest_news as $post) {
-            $tag_names = $post->tags->pluck('name')->toArray();
-            $post->tag_names = $tag_names;
-        }
+        $latest_news = $this->model->whereNotIn('id',$read_news_id)->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->get();
         return $latest_news;
     }
 
-    public function getHotNews()
+    public function getHotNews($read_news_id)
     {
-        $hot_news = $this->model->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->with('tags')->get();
-        foreach ($hot_news as $post) {
-            $tag_names = $post->tags->pluck('name')->toArray();
-            $post->tag_names = $tag_names;
-        }
+        $hot_news = $this->model->whereNotIn('id',$read_news_id)->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->get();
         return $hot_news;
+    }
+
+    public function getNewsById($id){
+        $post = parent::find($id);
+        $tag_names = $post->tags->pluck('name')->toArray();
+        $post->tag_names = $tag_names;
+        return $post;
     }
 }
