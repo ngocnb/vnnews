@@ -103,12 +103,13 @@ class PostAPIController extends AppBaseController
         return $this->sendSuccess('Post deleted successfully');
     }
 
-    public function loadData(Request $request){
+    public function loadData(Request $request)
+    {
         $read_news_id = json_decode($request->read_news_id);
         //read news
         $read_news = $this->postRepository->getReadNews($read_news_id);
         $read_news_html = "<h2>Tin đã đọc</h2>";
-        if($read_news != null){
+        if ($read_news != null) {
             $read_news_html = view('user.homepage.frame_news', ['news' => $read_news])->render();
         }
         //hot news
@@ -117,15 +118,23 @@ class PostAPIController extends AppBaseController
         $hot_news_html .= view('user.homepage.frame_news', ['news' => $hot_news])->render();
         //latest news
         $page = $request->page;
-        $latest_news = $this->postRepository->getLatestNews($page,$read_news_id);
-        $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news,'page' => $page])->render();
+        $latest_news = $this->postRepository->getLatestNews($page, $read_news_id);
+        $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news])->render();
         //total Pages
         $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
-        return response()->json(['read_news' => $read_news_html,'latest_news' => $latest_news_html,'hot_news' => $hot_news_html,'total_pages'=>$total_pages]);
+        return response()->json(['read_news' => $read_news_html, 'latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
     }
 
-    public function getNewsById($id){
+    public function getNewsById($id)
+    {
         $post = $this->postRepository->getNewsById($id);
         return response()->json(['news' => $post]);
+    }
+
+    public function search($input = "")
+    {
+        $search_news =  $this->postRepository->search($input);
+        $search_news_html = view('user.homepage.search_news', ['news' => $search_news])->render();
+        return response()->json(['news' => $search_news_html]);
     }
 }
