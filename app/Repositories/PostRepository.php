@@ -17,8 +17,10 @@ class PostRepository extends BaseRepository
         'score_click',
         'score_like',
         'score_hot',
-        'is_new'
+        'is_new',
     ];
+
+    private $source = ['vnexpress'];
 
     public function getFieldsSearchable(): array
     {
@@ -28,5 +30,40 @@ class PostRepository extends BaseRepository
     public function model(): string
     {
         return Post::class;
+    }
+
+    public function findPostByLink($link)
+    {
+        return $this->model->where('link', $link)->first();
+    }
+
+    public function getTotalPages($count)
+    {
+        return ceil(($this->model
+        ->count() - $count) / 10);
+    }
+
+    public function getReadNews($read_news_id){
+        $read_news = $this->model->whereIn('id',$read_news_id)->orderByRaw("created_at desc")->take(10)->get();
+        return $read_news;
+    }
+
+    public function getLatestNews($page,$read_news_id)
+    {
+        $latest_news = $this->model->whereNotIn('id',$read_news_id)->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->get();
+        return $latest_news;
+    }
+
+    public function getHotNews($read_news_id)
+    {
+        $hot_news = $this->model->whereNotIn('id',$read_news_id)->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->get();
+        return $hot_news;
+    }
+
+    public function getNewsById($id){
+        $post = parent::find($id);
+        $tag_names = $post->tags->pluck('name')->toArray();
+        $post->tag_names = $tag_names;
+        return $post;
     }
 }
