@@ -69,10 +69,14 @@ class PostRepository extends BaseRepository
         return $post;
     }
 
-    public function search($input)
+    public function search($input, $take = 0)
     {
         $search_news = $this->model->where('title', 'like', '%' . $input . '%')
-            ->orderByRaw("created_at desc")->take(6)->get();
+            ->orderByRaw("created_at desc")
+            ->when($take > 0, function ($query) use ($take) {
+                return $query->take($take);
+            })
+            ->get();
         foreach ($search_news as $key => $post) {
             $tag_names = $post->tags->pluck('name')->toArray();
             $post->tag_names = $tag_names;

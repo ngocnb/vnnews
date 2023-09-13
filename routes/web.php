@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
- Route::get('/', function () {
+Route::get('/', function () {
     return view('user.homepage');
 });
 
@@ -31,3 +31,5 @@ Route::get('/login', function () {
 Route::get('/signup', function () {
     return view('user.signup');
 });
+
+Route::get('/search/{input}', [PostAPIController::class, 'searchPage']);

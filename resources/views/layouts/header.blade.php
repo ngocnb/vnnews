@@ -55,7 +55,7 @@
     inputElement.addEventListener("keydown", function(event) {
         if (event.key === "Enter" || event.keyCode === 13) {
             const inputValue = inputElement.value;
-            window.location.href = 'search/' + inputValue;
+            window.location.href = '/search/' + inputValue;
         }
     });
 </script>
