@@ -133,4 +133,16 @@ class PostAPIController extends AppBaseController
         $post = $this->postRepository->getNewsById($id);
         return response()->json(['news' => $post]);
     }
+
+    public function search($input = "")
+    {
+        $search_news =  $this->postRepository->search($input, 2);
+        return response()->json(['search_news' => $search_news]);
+    }
+
+    public function searchPage($input)
+    {
+        $search_news =  $this->postRepository->search($input);
+        return view('user.search', ['news' => $search_news, 'input' => $input]);
+    }
 }

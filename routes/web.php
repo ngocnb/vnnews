@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\PostAPIController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,3 +21,5 @@ Route::get('/', function () {
 Route::get('/homepage', function () {
     return view('user.homepage');
 });
+
+Route::get('/search/{input}', [PostAPIController::class, 'searchPage']);

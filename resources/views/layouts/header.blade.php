@@ -1,3 +1,6 @@
+@php
+$sourceArray = json_decode(file_get_contents(public_path('data.json')),true)['source'];
+@endphp
 <div class="header">
     <div class="logo"><a href="/homepage">
             <h1>VNNEWS</h1>
@@ -9,7 +12,9 @@
             </svg>
         </div>
         <input id="input" type="text" placeholder="Search">
-        <div class="output"></div>
+        <div class="output">
+
+        </div>
     </div>
     <div class="account">
         <div class="login"><a href="/login">
@@ -20,3 +25,57 @@
             </a></div>
     </div>
 </div>
+<script>
+    const inputElement = document.getElementById("input");
+    let timeoutId;
+    const delay = 1000;
+
+    inputElement.addEventListener("input", function() {
+        clearTimeout(timeoutId);
+
+        const inputValue = inputElement.value;
+        if (inputValue == '') {
+            $('.output').css('display', 'none');
+        } else {
+            timeoutId = setTimeout(function() {
+                $.ajax({
+                    url: '/api/search/' + inputValue,
+                    type: 'get',
+                    success: function(response) {
+                        const search_news = response.search_news;
+                        const regex = new RegExp(inputValue, "gi");
+                        const sourceArray = @json($sourceArray);
+                        let html = '';
+                        for (let i = 0; i < search_news.length; i++) {
+                            const news = search_news[i];
+                            const title = news['title'].replace(regex, match => {
+                                return '<b>' + match + '</b>';
+                            });
+                            html += '<div class="frame"><div class = "source" ><p><a href = "' +
+                                news['link'] + '">' + sourceArray[news['source']] +
+                                '</a></p></div><div class = "title" ><a href = "#" data-toggle = "modal" data-target = "#postModal" data-id = "' +
+                                news['id'] + '">' + title + '</a><div class="tags">';
+                            for (let j = 0; j < news['tag_names'].length; j++) {
+                                const tag = news['tag_names'][j];
+                                html += '<div class="tag">' + tag + '</div>';
+                            }
+                            html += '</div> </div> </div>';
+                        }
+                        $('.output').html(html);
+                        $('.output').css('display', 'block');
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                });
+            }, delay);
+        }
+    });
+
+    inputElement.addEventListener("keydown", function(event) {
+        if (event.key === "Enter" || event.keyCode === 13) {
+            const inputValue = inputElement.value;
+            window.location.href = '/search/' + inputValue;
+        }
+    });
+</script>
