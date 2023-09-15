@@ -18,6 +18,6 @@ return [
         'oto-xe-may' => 'https://vnexpress.net/rss/oto-xe-may.rss',
         'tam-su'     => 'https://vnexpress.net/rss/tam-su.rss',
         'cuoi'       => 'https://vnexpress.net/rss/cuoi.rss',
-//        'tin-noi-bat' => 'https://vnexpress.net/rss/tin-noi-bat.rss',
+        'tin-noi-bat' => 'https://vnexpress.net/rss/tin-noi-bat.rss',
     ],
 ];
