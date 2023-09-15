@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\API\PostAPIController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,3 +27,5 @@ Route::resource('users', App\Http\Controllers\API\UserAPIController::class)
 
 Route::resource('tags', App\Http\Controllers\API\TagAPIController::class)
     ->except(['create', 'edit']);
+
+Route::post('/loadData', [PostAPIController::class, 'loadData']);

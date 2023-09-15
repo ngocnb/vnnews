@@ -105,4 +105,20 @@ class PostAPIController extends AppBaseController
 
         return $this->sendSuccess('Post deleted successfully');
     }
+
+    public function loadData(Request $request)
+    {
+        $read_news_id = [];
+        //hot news
+        $hot_news = $this->postRepository->getHotNews($read_news_id);
+        $hot_news_html = "<h2>Tin hot</h2>";
+        $hot_news_html .= view('user.homepage.frame_news', ['news' => $hot_news])->render();
+        //latest news
+        $page = $request->page;
+        $latest_news = $this->postRepository->getLatestNews($page, $read_news_id);
+        $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news])->render();
+        //total Pages
+        $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
+        return response()->json(['latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
+    }
 }

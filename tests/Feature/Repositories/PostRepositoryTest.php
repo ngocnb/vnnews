@@ -70,3 +70,43 @@ test('it finds a post by link', function () {
     expect($foundPost->link)->toBe($post->link);
     expect($foundPost->score_time)->toBe(500);
 });
+
+test('it calculates total pages correctly', function () {
+    $posts = Post::factory()->count(65)->create();
+    $read_counts = 7;
+
+    $totalPages = $this->postRepo->getTotalPages($read_counts);
+
+    $expectedTotalPages = ceil(58 / 10);
+    expect($totalPages)->toBe($expectedTotalPages);
+});
+
+test('it get the latest news by page', function () {
+    $posts = Post::factory()->count(25)->create();
+    $read_news_id = [$posts[0]->id, $posts[1]->id];
+    $page = 1;
+
+    // Act
+    $latestNews = $this->postRepo->getLatestNews($page, $read_news_id);
+
+    // Assert
+    expect($latestNews)->toBeInstanceOf(Collection::class);
+    expect($latestNews->count())->toBe(10);
+    foreach ($latestNews as $post) {
+        expect(in_array($post->id, $read_news_id))->toBeFalse();
+    }
+});
+
+test('it get the top 10 hot news', function () {
+    $posts = Post::factory()->count(25)->create(['score_hot' => 1]);
+    $read_news_id = [$posts[0]->id, $posts[1]->id];
+    // Act
+    $hotNews = $this->postRepo->getHotNews($read_news_id);
+
+    // Assert
+    expect($hotNews)->toBeInstanceOf(Collection::class);
+    expect($hotNews->count())->toBe(10);
+    foreach ($hotNews as $post) {
+        expect(in_array($post->id, $read_news_id))->toBeFalse();
+    }
+});
