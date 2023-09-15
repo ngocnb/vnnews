@@ -96,10 +96,10 @@ class RSSReaderVnexpress
     public function saveContentToDatabase($data, $tag)
     {
         if ($this->postRepository->findPostByLink($data['link']) == null) {
-            $posts = $this->postRepository->create($data);
+            $post = $this->postRepository->create($data);
             foreach ($tag as $key => $tag_name) {
                 $tag_id = $this->tagRepository->findTagByName($tag_name)->id;
-                $posts->tags()->attach($tag_id);
+                $post->tags()->attach($tag_id);
             }
         }
     }

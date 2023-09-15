@@ -110,3 +110,18 @@ test('it get the top 10 hot news', function () {
         expect(in_array($post->id, $read_news_id))->toBeFalse();
     }
 });
+
+
+test('it get news by id', function () {
+    $post = Post::factory()->create();
+    $tag_name = "Thế giới";
+    $id = $post->id;
+    $tag_id = $this->tagRepository->findTagByName($tag_name)->id;
+    $post->tags()->attach($tag_id);
+    // Act
+    $news = $this->postRepo->getNewsById($id);
+
+    // Assert
+    expect($news)->toBeInstanceOf(Collection::class);
+    expect($news)->toBe($post);
+});
