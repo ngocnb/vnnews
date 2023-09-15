@@ -30,3 +30,4 @@ Route::resource('tags', App\Http\Controllers\API\TagAPIController::class)
 
 Route::post('/loadData', [PostAPIController::class, 'loadData']);
 Route::get('/getNewsById/{id}', [PostAPIController::class, 'getNewsById']);
+Route::get('/search/{input?}', [PostAPIController::class, 'search']);

@@ -136,3 +136,16 @@ test('it get read_news by read_news_id', function () {
     expect($news)->toBeInstanceOf(Collection::class);
     expect($news)->toBe($post);
 });
+
+
+test('it search news', function () {
+    $posts = Post::factory()->count(2)->create(['title' => 'Tìm kiếm title 123']);
+    $input = 'Tìm kiếm title';
+    // Act
+    $search_news = $this->postRepo->search($input, 2);
+    foreach ($search_news as $key => $news) {
+        expect($news)->toBeInstanceOf(Post::class);
+        expect($news->title)->toBe('Tìm kiếm title 123');
+    }
+    expect($search_news->count())->toBe(2);
+});
