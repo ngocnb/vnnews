@@ -125,3 +125,14 @@ test('it get news by id', function () {
     expect($news)->toBeInstanceOf(Collection::class);
     expect($news)->toBe($post);
 });
+
+test('it get read_news by read_news_id', function () {
+    $post = Post::factory()->create();
+    $read_news_id = [$post->id];
+    // Act
+    $news = $this->postRepo->getReadNews($read_news_id);
+
+    // Assert
+    expect($news)->toBeInstanceOf(Collection::class);
+    expect($news)->toBe($post);
+});

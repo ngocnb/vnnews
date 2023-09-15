@@ -108,7 +108,13 @@ class PostAPIController extends AppBaseController
 
     public function loadData(Request $request)
     {
-        $read_news_id = [];
+        $read_news_id = json_decode($request->read_news_id);
+        //read news
+        $read_news = $this->postRepository->getReadNews($read_news_id);
+        $read_news_html = "<h2>Tin đã đọc</h2>";
+        if ($read_news != null) {
+            $read_news_html = view('user.homepage.frame_news', ['news' => $read_news])->render();
+        }
         //hot news
         $hot_news = $this->postRepository->getHotNews($read_news_id);
         $hot_news_html = "<h2>Tin hot</h2>";
@@ -119,7 +125,7 @@ class PostAPIController extends AppBaseController
         $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news])->render();
         //total Pages
         $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
-        return response()->json(['latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
+        return response()->json(['read_news' => $read_news_html, 'latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
     }
 
     public function getNewsById($id)
