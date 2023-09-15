@@ -128,6 +128,7 @@
             if (!exist) {
                 readNews.push(postId);
                 localStorage.setItem('readNews', JSON.stringify(readNews));
+                loadData();
             }
         }
     });
@@ -138,10 +139,12 @@
             type: 'post',
             data: {
                 'page': localStorage.getItem('page') || 1,
+                'read_news_id': localStorage.getItem('readNews') || '[]',
             },
             success: function(response) {
                 $('.fr').html(response.latest_news);
                 $('.hot-news').html(response.hot_news);
+                $('.read-news').html(response.read_news);
                 localStorage.setItem('total_pages', response.total_pages);
             },
             error: function(error) {

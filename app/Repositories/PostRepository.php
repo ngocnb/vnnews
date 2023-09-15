@@ -41,6 +41,12 @@ class PostRepository extends BaseRepository
             ->count() - $count) / 10);
     }
 
+    public function getReadNews($read_news_id)
+    {
+        $read_news = $this->model->whereIn('id', $read_news_id)->orderByRaw("created_at desc")->take(10)->get();
+        return $read_news;
+    }
+
     public function getLatestNews($page, $read_news_id)
     {
         $latest_news = $this->model->whereNotIn('id', $read_news_id)->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->get();
