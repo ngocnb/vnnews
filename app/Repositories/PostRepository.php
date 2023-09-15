@@ -52,4 +52,12 @@ class PostRepository extends BaseRepository
         $hot_news = $this->model->whereNotIn('id', $read_news_id)->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->get();
         return $hot_news;
     }
+
+    public function getNewsById($id)
+    {
+        $post = parent::find($id);
+        $tag_names = $post->tags->pluck('name')->toArray();
+        $post->tag_names = $tag_names;
+        return $post;
+    }
 }

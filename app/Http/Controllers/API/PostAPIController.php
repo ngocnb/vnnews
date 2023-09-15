@@ -121,4 +121,10 @@ class PostAPIController extends AppBaseController
         $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
         return response()->json(['latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
     }
+
+    public function getNewsById($id)
+    {
+        $post = $this->postRepository->getNewsById($id);
+        return response()->json(['news' => $post]);
+    }
 }

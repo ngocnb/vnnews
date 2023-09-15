@@ -29,3 +29,4 @@ Route::resource('tags', App\Http\Controllers\API\TagAPIController::class)
     ->except(['create', 'edit']);
 
 Route::post('/loadData', [PostAPIController::class, 'loadData']);
+Route::get('/getNewsById/{id}', [PostAPIController::class, 'getNewsById']);
