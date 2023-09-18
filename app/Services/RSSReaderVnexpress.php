@@ -84,8 +84,7 @@ class RSSReaderVnexpress
         }
         try {
             $data['tag'] = $crawler->filter('ul.breadcrumb > li > a')->each(function ($node) {
-                if ($this->tagRepository->findTagByName($node->text()) == null)
-                    $this->tagRepository->create(['name' => $node->text()]);
+                $this->tagRepository->firstOrCreate(['name' => $node->text()], ['name' => $node->text()]);
                 return $node->text();
             });
         } catch (\Exception $e) {
@@ -95,12 +94,10 @@ class RSSReaderVnexpress
     }
     public function saveContentToDatabase($data, $tag)
     {
-        if ($this->postRepository->findPostByLink($data['link']) == null) {
-            $posts = $this->postRepository->create($data);
-            foreach ($tag as $key => $tag_name) {
-                $tag_id = $this->tagRepository->findTagByName($tag_name)->id;
-                $posts->tags()->attach($tag_id);
-            }
+        $posts = $this->postRepository->firstOrCreate(['link' => $data['link']], $data);
+        foreach ($tag as $key => $tag_name) {
+            $tag_id = $this->tagRepository->findTagByName($tag_name)->id;
+            $posts->tags()->attach($tag_id);
         }
     }
 }
