@@ -1,0 +1,210 @@
+body{
+    position: relative;
+}
+.header {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c0c0c0;
+}
+.logo {
+    width: 15%;
+    text-align: center;
+}
+.title a {
+    color: black;
+    text-decoration: none;
+}
+.logo a,
+.account a {
+    text-decoration: none;
+    color: black;
+}
+.logo h1 {
+    margin: 0;
+}
+.search {
+    border: 0.5px solid #c0c0c0;
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    text-align: center;
+}
+.search .icon {
+    margin: auto;
+    padding: 6px;
+}
+.search svg {
+    width: 24px;
+    height: 24px;
+    text-align: center;
+}
+.search input[type="text"] {
+    width: 100%;
+    float: right;
+    padding: 6px;
+    border: none;
+    font-size: 17px;
+}
+.search input[type="text"]:focus {
+    outline: none;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search {
+    width: 55%;
+    margin-right: auto;
+}
+
+.account {
+    width: 30%;
+    display: flex;
+    align-items: center;
+}
+.account .login {
+    width: 35%;
+    border: 0.5px solid #c0c0c0;
+    border-radius: 50%;
+    margin-left: auto;
+}
+.account .signup a,
+.account .login a {
+    text-align: center;
+}
+.account .signup {
+    width: 35%;
+    border: 0.5px solid #c0c0c0;
+    border-radius: 50%;
+    margin-right: auto;
+}
+.account div {
+    margin-left: 15px;
+}
+
+.content {
+    z-index: 0;
+    display: flex;
+}
+.content .left {
+    width: 70%;
+}
+.content .left .latest-news {
+    padding: 10px 40px;
+}
+.content .right {
+    border-left: 1px solid #c0c0c0;
+    width: 30%;
+}
+.content .right .hot-news,
+.content .right .read-news {
+    padding: 10px 40px;
+    border-bottom: 1px solid #c0c0c0;
+}
+.frame {
+    /* border: 1px solid black; */
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.latest-news {
+    position: absolute;
+}
+
+.latest-news .fr {
+    width: 80%;
+    float: left;
+}
+.latest-news .back-page {
+    width: 10%;
+    float: left;
+}
+.back-page,
+.next-page {
+    top: 200px;
+    position: relative;
+}
+.latest-news svg {
+    width: 50px;
+    height: 50px;
+}
+
+.latest-news .next-page {
+    width: 10%;
+    float: right;
+}
+
+.frame .source {
+    margin-right: 20px;
+    color: #c0c0c0;
+    cursor: pointer;
+}
+
+.frame .source p {
+    margin-top: 0px;
+    border: 1px solid #c0c0c0;
+    border-radius: 3px;
+}
+.source p a {
+    text-decoration: none;
+    color: #c0c0c0;
+}
+
+
+#postModal {
+    display: none;
+}
+.modal-content {
+    width: 1349px;
+    right: 415px;
+}
+.modal-body .tags .tag {
+    cursor: pointer;
+    border: 1px solid#c0c0c0;
+    border-radius: 5px;
+    padding: 3px;
+    float: left;
+    margin-right: 10px;
+}
+
+.button {
+    float: right;
+    margin-right: 30px;
+}
+
+.button .like,
+.button .dislike {
+    cursor: pointer;
+    margin: 10px;
+}
+.output{
+    width: 585px;
+    position: fixed;
+    z-index: 1;
+    top: 50px;
+    left: 250px;    
+    display:none;
+    background-color: white;
+}
+.output .frame{
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    color: #c0c0c0;
+}
+.output .source{
+    padding: 5px;
+}
+.output .title{
+    padding: 5px;
+    float: left;
+}
+
+.output .tags .tag{
+    border: 1px solid #c0c0c0;
+    border-radius: 5px;
+    color: #c0c0c0;
+    margin-right: 10px;
+    float: left;
+}

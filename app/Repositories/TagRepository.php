@@ -20,4 +20,9 @@ class TagRepository extends BaseRepository
     {
         return Tag::class;
     }
+
+    public function findTagByName($name)
+    {
+        return  $this->model->where('name', $name)->first();
+    }
 }

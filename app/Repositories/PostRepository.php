@@ -29,4 +29,27 @@ class PostRepository extends BaseRepository
     {
         return Post::class;
     }
+
+    public function findPostByLink($link)
+    {
+        return $this->model->where('link', $link)->first();
+    }
+
+    public function getTotalPages($count)
+    {
+        return ceil(($this->model
+            ->count() - $count) / 10);
+    }
+
+    public function getLatestNews($page, $read_news_id)
+    {
+        $latest_news = $this->model->whereNotIn('id', $read_news_id)->orderByRaw("created_at desc")->skip(($page - 1) * 10)->take(10)->get();
+        return $latest_news;
+    }
+
+    public function getHotNews($read_news_id)
+    {
+        $hot_news = $this->model->whereNotIn('id', $read_news_id)->where('score_hot', '>', 0)->orderByRaw("created_at desc")->take(10)->get();
+        return $hot_news;
+    }
 }
