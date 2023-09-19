@@ -26,6 +26,35 @@ $sourceArray = json_decode(file_get_contents(public_path('data.json')),true)['so
     </div>
 </div>
 <script>
+    $(document).ready(function() {
+        if (localStorage.getItem('token') != undefined) {
+            let user = getUser();
+            console.log(getUser());
+        }
+    });
+
+    function getUser() {
+        $.ajax({
+            url: '/api/getUser',
+            type: 'post',
+            data: {
+
+            },
+            headers: {
+                'Authorization': localStorage.getItem('token')
+            },
+            success: function(response) {
+                if (response.user != null) {
+                    html = '<div class="username"><a href="#"><h3>' + response.user.name + '</h3></a></div><div class="logout"><a href="#"><h3>Log out</h3></a></div>';
+                    $('.account').html(html);
+                }
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+    }
+
     const inputElement = document.getElementById("input");
     let timeoutId;
     const delay = 1000;
