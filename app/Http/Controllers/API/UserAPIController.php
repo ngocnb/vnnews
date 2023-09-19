@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\CreateUserAPIRequest;
 use App\Http\Requests\API\UpdateUserAPIRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
+use Illuminate\Support\Facades\Validator;
 
 /**
  * Class UserAPIController
@@ -104,5 +105,20 @@ class UserAPIController extends AppBaseController
         $user->delete();
 
         return $this->sendSuccess('User deleted successfully');
+    }
+    public function login(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email'    => 'required|string|email|max:50',
+            'password' => 'required|string|min:6|max:25',
+        ]);
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+        return response()->json(['token' => $this->userRepository->login($request)]);
+    }
+    public function getUser(Request $request)
+    {
+        return response()->json(['user' => $this->userRepository->getUser($request)]);
     }
 }
