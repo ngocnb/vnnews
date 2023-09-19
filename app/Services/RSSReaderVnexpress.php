@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use Goutte\Client;
-use Vedmant\FeedReader\FeedReader;
-
 use App\Repositories\PostRepository;
 use App\Repositories\TagRepository;
+use Goutte\Client;
+use Vedmant\FeedReader\FeedReader;
 
 class RSSReaderVnexpress
 {
@@ -17,9 +16,9 @@ class RSSReaderVnexpress
 
     public function __construct(FeedReader $feedReader, PostRepository $postRepo, TagRepository $tagRepo)
     {
-        $this->feedReader = $feedReader;
+        $this->feedReader     = $feedReader;
         $this->postRepository = $postRepo;
-        $this->tagRepository = $tagRepo;
+        $this->tagRepository  = $tagRepo;
     }
 
     public function run()
@@ -40,27 +39,30 @@ class RSSReaderVnexpress
     public function getRSSContent(string $rssUrl)
     {
         // read RSS link and get rss contents
-        $feed = $this->feedReader->read($rssUrl);
-        $result = [];
+        $feed      = $this->feedReader->read($rssUrl);
+        $result    = [];
         $score_hot = 0;
         // check hot news
-        if ($rssUrl == 'https://vnexpress.net/rss/tin-noi-bat.rss') $score_hot = 200;
+        if ($rssUrl == 'https://vnexpress.net/rss/tin-noi-bat.rss') {
+            $score_hot = 200;
+        }
+
         // foreach item in rss contents, get title, description and link
         // in each link, crawl the html content and filter the class fck_detail
         // save the content to database
         foreach ($feed->get_items() as $item) {
-            $data = [];
+            $data                = [];
             $data['title']       = $item->get_title();
             $data['description'] = $item->get_description();
             $data['link']        = $item->get_link();
             $data['score_hot']   = $score_hot;
             if (strpos($data['link'], 'video.vnexpress') === false) {
-                $d = $this->getContentFromLink($data['link']);
-                $data['content'] = $d['content'];
-                $tag             = $d['tag'];
+                $d                  = $this->getContentFromLink($data['link']);
+                $data['content']    = $d['content'];
+                $tag                = $d['tag'];
                 $data['score_time'] = 500;
                 $this->saveContentToDatabase($data, $tag);
-                $result[]        = $data;
+                $result[] = $data;
             }
         }
         return $result;
