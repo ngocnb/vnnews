@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
-class User extends Model {
-    use HasFactory;
+class User extends Authenticatable
+{
+    use HasFactory, HasApiTokens;
 
     public $table = 'users';
 
@@ -15,6 +17,11 @@ class User extends Model {
         'name',
         'email',
         'email_verified_at',
+        'password',
+        'remember_token',
+    ];
+
+    protected $hidden = [
         'password',
         'remember_token',
     ];
@@ -37,19 +44,23 @@ class User extends Model {
         'updated_at'        => 'nullable',
     ];
 
-    public function tags(): MorphToMany {
+    public function tags(): MorphToMany
+    {
         return $this->morphToMany(Tag::class, 'user_tags_score');
     }
 
-    public function posts(): MorphToMany {
+    public function posts(): MorphToMany
+    {
         return $this->morphToMany(Post::class, 'post_interactions');
     }
 
-    public function userPosts(): \Illuminate\Database\Eloquent\Relations\HasMany {
+    public function userPosts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(\App\Models\UserPost::class, 'user_id');
     }
 
-    public function userTags(): \Illuminate\Database\Eloquent\Relations\HasMany {
+    public function userTags(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
         return $this->hasMany(\App\Models\UserTag::class, 'user_id');
     }
 }
