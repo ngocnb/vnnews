@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\AppBaseController;
 use App\Http\Requests\API\CreatePostAPIRequest;
 use App\Http\Requests\API\UpdatePostAPIRequest;
 use App\Models\Post;
 use App\Repositories\PostRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AppBaseController;
 
 /**
  * Class PostAPIController
@@ -106,26 +106,37 @@ class PostAPIController extends AppBaseController
         return $this->sendSuccess('Post deleted successfully');
     }
 
+    // public function loadData(Request $request)
+    // {
+    //     $read_news_id = json_decode($request->read_news_id);
+    //     //read news
+    //     $read_news = $this->postRepository->getReadNews($read_news_id);
+    //     $read_news_html = "<h2>Tin đã đọc</h2>";
+    //     if ($read_news != null) {
+    //         $read_news_html = view('user.homepage.frame_news', ['news' => $read_news])->render();
+    //     }
+    //     //hot news
+    //     $hot_news = $this->postRepository->getHotNews($read_news_id);
+    //     $hot_news_html = "<h2>Tin hot</h2>";
+    //     $hot_news_html .= view('user.homepage.frame_news', ['news' => $hot_news])->render();
+    //     //latest news
+    //     $page = $request->page;
+    //     $latest_news = $this->postRepository->getLatestNews($page, $read_news_id);
+    //     $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news])->render();
+    //     //total Pages
+    //     $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
+    //     return response()->json(['read_news' => $read_news_html, 'latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
+    // }
+
     public function loadData(Request $request)
     {
-        $read_news_id = json_decode($request->read_news_id);
-        //read news
-        $read_news = $this->postRepository->getReadNews($read_news_id);
-        $read_news_html = "<h2>Tin đã đọc</h2>";
-        if ($read_news != null) {
-            $read_news_html = view('user.homepage.frame_news', ['news' => $read_news])->render();
-        }
-        //hot news
-        $hot_news = $this->postRepository->getHotNews($read_news_id);
-        $hot_news_html = "<h2>Tin hot</h2>";
-        $hot_news_html .= view('user.homepage.frame_news', ['news' => $hot_news])->render();
-        //latest news
-        $page = $request->page;
-        $latest_news = $this->postRepository->getLatestNews($page, $read_news_id);
-        $latest_news_html = view('user.homepage.frame_news', ['news' => $latest_news])->render();
-        //total Pages
-        $total_pages = $this->postRepository->getTotalPages(count($read_news_id));
-        return response()->json(['read_news' => $read_news_html, 'latest_news' => $latest_news_html, 'hot_news' => $hot_news_html, 'total_pages' => $total_pages]);
+        $page          = $request->page;
+        $read_news_ids = json_decode($request->read_news_ids);
+        $read_news     = $this->postRepository->getReadNews($read_news_ids);
+        $hot_news      = $this->postRepository->getHotNews($read_news_ids);
+        $latest_news   = $this->postRepository->getLatestNews($page, $read_news_ids);
+        $total_pages   = $this->postRepository->getTotalPages(count($read_news_ids));
+        return response()->json(['read_news' => $read_news, 'latest_news' => $latest_news, 'hot_news' => $hot_news, 'total_pages' => $total_pages]);
     }
 
     public function getNewsById($id)
@@ -134,15 +145,20 @@ class PostAPIController extends AppBaseController
         return response()->json(['news' => $post]);
     }
 
-    public function search($input = "")
+    public function search($input = "", $take = '*')
     {
-        $search_news =  $this->postRepository->search($input, 2);
+        $search_news = $this->postRepository->search($input, $take);
         return response()->json(['search_news' => $search_news]);
     }
 
     public function searchPage($input)
     {
-        $search_news =  $this->postRepository->search($input);
+        $search_news = $this->postRepository->search($input);
         return view('user.search', ['news' => $search_news, 'input' => $input]);
+    }
+
+    public function getSourceNames()
+    {
+        return response()->json(['source_names' => $this->postRepository->getSourceNames()]);
     }
 }

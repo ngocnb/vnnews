@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Post;
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\File;
 
 class PostRepository extends BaseRepository
 {
@@ -17,7 +18,7 @@ class PostRepository extends BaseRepository
         'score_click',
         'score_like',
         'score_hot',
-        'is_new'
+        'is_new',
     ];
 
     public function getFieldsSearchable(): array
@@ -38,7 +39,7 @@ class PostRepository extends BaseRepository
     public function getTotalPages($count)
     {
         return ceil(($this->model
-            ->count() - $count) / 10);
+                ->count() - $count) / 10);
     }
 
     public function getReadNews($read_news_id)
@@ -61,8 +62,8 @@ class PostRepository extends BaseRepository
 
     public function getNewsById($id)
     {
-        $post = parent::find($id);
-        $tag_names = $post->tags->pluck('name')->toArray();
+        $post            = parent::find($id);
+        $tag_names       = $post->tags->pluck('name')->toArray();
         $post->tag_names = $tag_names;
         return $post;
     }
@@ -76,9 +77,13 @@ class PostRepository extends BaseRepository
             })
             ->get();
         foreach ($search_news as $key => $post) {
-            $tag_names = $post->tags->pluck('name')->toArray();
+            $tag_names       = $post->tags->pluck('name')->toArray();
             $post->tag_names = $tag_names;
         }
         return $search_news;
+    }
+    public function getSourceNames()
+    {
+        return json_decode(File::get(public_path('data.json')), true)['source'];
     }
 }
